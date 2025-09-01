@@ -1,0 +1,417 @@
+;;; Orchestral blur of Schubert "the death and the maiden", measures 1 to 32
+
+;; (defparameter *default-notation-editor* "MuseScore 4.app")
+(defparameter *default-notation-editor* "Sibelius.app")
+
+(setf material
+      (musicxml-to-omn 
+           "/Users/bornhoeft/Documents/projekte/04-kammermusik2-4/pastell/scores/musicxml/Schemen-16min-orig.musicxml"))
+
+;; string quartet instruments
+(setf instruments '(violin violin viola violoncello))
+
+;; all pitches of each instrument
+(setf all-pitches-voices
+                 (loop for i in instruments
+                         for amb = (ambitus-instrument i)
+                         collect
+        (loop for j from (first amb) to (second amb)
+              collect (integer-to-pitch j))))
+
+#|
+;; test violin 1     
+(setf vn-blur
+      (loop for j in
+              (loop for i in (reverse (first all-pitches-voices))
+                    collect
+                      (length-legato
+                       (ambitus-filter (list i i) (flatten (first mat-voices)))))
+            when (not (equal (length j) 1))
+              collect j))
+|#
+
+;; scan each voice with all the pitches of the according instrument (ambitus-filter)
+;; collect all equal pitches, remove the rests between them and fill the gaps 
+;; by lengthen the durations (length-legato)
+
+(setf new-material
+      (loop for m in material
+            for k in all-pitches-voices
+            collect
+              (loop for j in
+                      (loop for i in (reverse k)
+                            collect
+                              (length-legato
+                               (ambitus-filter (list i i) (flatten m))))
+                    when (not (equal (length j) 1))
+                      collect j)))
+
+;; number of instruments (= different pitches) per voice
+(setf lengths (loop for i in new-material
+                    collect (length i)))
+;; (9 9 7 11) means 9 voc1, 9 vn2, 7 va, 11 vc
+
+(setf new-mat-voices
+      (loop for i in new-material
+              append i))
+
+(setf new-mat-voc-ts
+      (loop for i in new-mat-voices
+              collect (omn-to-time-signature i '(4 4))))
+
+;; all voices with one pitch only
+(assign-variable 'voc 
+      (loop for i in new-mat-voc-ts
+              collect i))
+
+(setf voc1 (dictum '(:do 'pp :bar 31) voc1))
+
+;;;---------------------------------------------------------
+
+;;; Score and Layout
+
+(def-score schubert-blur
+    (:title "blur"
+     :composer "Achim Bornhoeft"
+     :copyright "Copyright © 2025"
+     :key-signature 'chromatic
+     :time-signature '((1 1 1 1) 4)
+     :tempo 8
+     :layout (list
+              (bracket-group
+               (violin1-layout 'voc1)
+               (violin1-layout 'voc2)
+               (violin1-layout 'voc3)
+               (violin1-layout 'voc4)
+               (violin1-layout 'voc5)
+               (violin1-layout 'voc6)
+               (violin1-layout 'voc7)
+               (violin1-layout 'voc8)
+               (violin1-layout 'voc9)
+               )
+              (bracket-group
+               (violin1-layout 'voc10)
+               (violin1-layout 'voc11)
+               (violin1-layout 'voc12)
+               (violin1-layout 'voc13)
+               (violin1-layout 'voc14)
+               (violin1-layout 'voc15)
+               (violin1-layout 'voc16)
+               (violin1-layout 'voc17)
+               (violin1-layout 'voc18)
+               )
+              (bracket-group
+               (viola-layout 'voc19)
+               (viola-layout 'voc20)
+               (viola-layout 'voc21)
+               (viola-layout 'voc22)
+               (viola-layout 'voc23)
+               (viola-layout 'voc24)
+               (viola-layout 'voc25)
+               )               
+              (bracket-group
+               (violoncello-layout 'voc26)
+               (violoncello-layout 'voc27)
+               (violoncello-layout 'voc28)
+               (violoncello-layout 'voc29)
+               (violoncello-layout 'voc30)
+               (violoncello-layout 'voc31)
+               (violoncello-layout 'voc32)
+               (violoncello-layout 'voc33)
+               (violoncello-layout 'voc34)
+               (violoncello-layout 'voc35)
+               (violoncello-layout 'voc36))))
+  
+  (voc1
+   :omn voc1
+   :channel 1
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 0
+   )
+  (voc2
+   :omn voc2
+   :channel 1
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 0
+   )
+  (voc3
+   :omn voc3
+   :channel 1
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 0
+   )
+  (voc4
+   :omn voc4
+   :channel 1
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 0
+   )
+  (voc5
+   :omn voc5
+   :channel 1
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 0
+   )
+  (voc6
+   :omn voc6
+   :channel 1
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 0
+   )
+  (voc7
+   :omn voc7
+   :channel 1
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 0
+   )
+  (voc8
+   :omn voc8
+   :channel 1
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 0
+   )
+  (voc9
+   :omn voc9
+   :channel 1
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 0
+   )
+  (voc10
+   :omn voc1
+   :channel 10
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 43
+   )
+  (voc11
+   :omn voc11
+   :channel 1
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 43
+   )
+  (voc12
+   :omn voc12
+   :channel 1
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 43
+   )
+  (voc13
+   :omn voc13
+   :channel 1
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 43
+   )
+  (voc14
+   :omn voc14
+   :channel 1
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 43
+   )
+  (voc15
+   :omn voc15
+   :channel 1
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 43
+   )
+  (voc16
+   :omn voc16
+   :channel 1
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 43
+   )
+  (voc17
+   :omn voc17
+   :channel 1
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 43
+   )
+  (voc18
+   :omn voc18
+   :channel 1
+   :sound 'gm
+   :program 'violin
+   :volume 95
+   :pan 43
+   )
+  (voc19
+   :omn voc19
+   :channel 1
+   :sound 'gm
+   :program 'viola
+   :volume 95
+   :pan 86
+   )
+  (voc20
+   :omn voc20
+   :channel 1
+   :sound 'gm
+   :program 'viola
+   :volume 95
+   :pan 86
+   )
+  (voc21
+   :omn voc21
+   :channel 1
+   :sound 'gm
+   :program 'viola
+   :volume 95
+   :pan 86
+   )
+  (voc22
+   :omn voc22
+   :channel 1
+   :sound 'gm
+   :program 'viola
+   :volume 95
+   :pan 86
+   )
+  (voc23
+   :omn voc23
+   :channel 1
+   :sound 'gm
+   :program 'viola
+   :volume 95
+   :pan 86
+   )
+  (voc24
+   :omn voc24
+   :channel 1
+   :sound 'gm
+   :program 'viola
+   :volume 95
+   :pan 86
+   )
+  (voc25
+   :omn voc25
+   :channel 1
+   :sound 'gm
+   :program 'viola
+   :volume 95
+   :pan 86
+   )
+  (voc26
+   :omn voc26
+   :channel 1
+   :sound 'gm
+   :program 'cello
+   :volume 95
+   :pan 127
+   )
+  (voc27
+   :omn voc27
+   :channel 1
+   :sound 'gm
+   :program 'cello
+   :volume 95
+   :pan 127
+   )
+  (voc28
+   :omn voc28
+   :channel 1
+   :sound 'gm
+   :program 'cello
+   :volume 95
+   :pan 127
+   )
+  (voc29
+   :omn voc29
+   :channel 1
+   :sound 'gm
+   :program 'cello
+   :volume 95
+   :pan 127
+   )
+  (voc30
+   :omn voc30
+   :channel 1
+   :sound 'gm
+   :program 'cello
+   :volume 95
+   :pan 127
+   )
+  (voc31
+   :omn voc31
+   :channel 1
+   :sound 'gm
+   :program 'cello
+   :volume 95
+   :pan 127
+   )
+  (voc32
+   :omn voc32
+   :channel 1
+   :sound 'gm
+   :program 'cello
+   :volume 95
+   :pan 127
+   )
+  (voc33
+   :omn voc33
+   :channel 1
+   :sound 'gm
+   :program 'cello
+   :volume 95
+   :pan 127
+   )
+  (voc34
+   :omn voc34
+   :channel 1
+   :sound 'gm
+   :program 'cello
+   :volume 95
+   :pan 127
+   )
+  (voc35
+   :omn voc35
+   :channel 1
+   :sound 'gm
+   :program 'cello
+   :volume 95
+   :pan 127
+   )
+  (voc36
+   :omn voc36
+   :channel 1
+   :sound 'gm
+   :program 'cello
+   :volume 95
+   :pan 127
+   )
+  )
+
+(display-musicxml *last-score*)
+(musicxml-to-editor)
+

@@ -1,3 +1,20 @@
+# mac desktop files
+.DS_Store
+
+# temporary Opusmodus files
+*.opmo~
+*.lisp~
+
+# temporary Reaper files
+*.RPP-bak
+*.reapeaks
+
+# compiled PWGL lisp files
+*.clufasl
+
+# lib directories (and its subdirectories)
+lib/**
+
 *.FASL
 *.fasl
 *.lisp-temp
@@ -15,16 +32,3 @@
 *.sx32fsl
 *.wx64fsl
 *.wx32fsl
-
-# ignore mac desktop files
-.DS_Store
-
-# ignore temporary Opusmodus files
-*.opmo~
-
-# ignore temporary Reaper files
-*.RPP-bak
-*..reapeaks
-
-# ignore lib directories
-lib/
